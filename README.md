@@ -6,7 +6,7 @@
 
 A web app for running a lab inventory. Each lab builds its own **modules** — antibodies, reagents, cell lines, mice, protocols, or anything else — and links them to **experiments**. When an experiment draft is saved, the amounts used are subtracted from stock automatically.
 
-### ▶ [Try the live demo](https://fatemehahmadi999.github.io/lab-inventory-modular/)
+### ▶ [Try the live demo](https://fatemehahmadi999.github.io/Labubook/)
 
 The demo opens a sample lab with antibodies, reagents, cell lines, mice and experiments. You are its admin, so you can try everything. It runs only in your browser: nothing is sent to a server, and **Start over** resets it.
 
