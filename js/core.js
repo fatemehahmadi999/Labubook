@@ -283,7 +283,7 @@ ACT.signOut = async () => {
 
 function showSignIn(mode = 'in') {
   if (App.store.mode === 'demo') {
-    showAuthScreen(`<div class="brand-mark">${ICON.flask}</div><h1>Lab Inventory demo</h1>
+    showAuthScreen(`<img class="brand-logo" src="assets/labubook-logo.png" alt="Labubook logo"><h1>Labubook demo</h1>
       <p class="lead">Look around a sample lab with antibodies, reagents, cell lines, mice and experiments. You are its admin, so you can try everything.</p>
       <p class="muted small">Everything you do stays in this browser only. Nothing is sent to a server.</p>
       <form id="demoForm" class="stack">
@@ -294,7 +294,7 @@ function showSignIn(mode = 'in') {
     return;
   }
   const isUp = mode === 'up';
-  showAuthScreen(`<div class="brand-mark">${ICON.flask}</div><h1>${esc(App.config.labName || 'Lab Inventory')}</h1>
+  showAuthScreen(`<img class="brand-logo" src="assets/labubook-logo.png" alt="Labubook logo"><h1>${esc(App.config.labName || 'Labubook')}</h1>
     <p class="lead">${isUp ? 'Create your account. An admin must invite your email before you can see the inventory.' : 'Sign in with your lab account.'}</p>
     <form id="authForm" class="stack">
       ${isUp ? '<label class="field"><span>Full name</span><input id="auName" required autocomplete="name"></label>' : ''}
@@ -340,7 +340,7 @@ ACT.recheck = async () => { try { onAuthChange(App.store.reloadUser ? await App.
 ACT.resendVerify = async () => { try { await App.store.sendVerification(); toast('Confirmation email sent.'); } catch (err) { toast(errorMessage(err), 'bad'); } };
 
 function showSetup() {
-  showAuthScreen(`<div class="brand-mark">${ICON.flask}</div><h1>Set up your lab</h1>
+  showAuthScreen(`<img class="brand-logo" src="assets/labubook-logo.png" alt="Labubook logo"><h1>Set up your lab</h1>
     <p class="lead">This inventory is empty. You will be its first admin. Pick the modules to start with — you can change, add or remove modules later.</p>
     <form id="setupForm" class="stack">
       <label class="field"><span>Lab name</span><input id="setupName" required value="${esc(App.config.labName || '')}" placeholder="e.g. Winkler Lab"></label>
@@ -476,7 +476,7 @@ function renderMain(fresh = false) {
 }
 
 function setPage(title, crumbs = []) {
-  document.title = `${title} · ${App.lab?.name || 'Lab Inventory'}`;
+  document.title = `${title} · ${App.lab?.name || 'Labubook'}`;
   $('#crumbs').innerHTML = crumbs.map(c => c.href ? `<a href="${c.href}">${esc(c.label)}</a>` : `<span>${esc(c.label)}</span>`).join('<span class="sep">/</span>');
 }
 
@@ -491,7 +491,8 @@ function renderSidebar() {
   const low = lowCount();
   const mods = activeModules();
   $('#sidebar').innerHTML = `
-    <div class="side-head"><div class="lab-name">${esc(App.lab?.name || 'Lab Inventory')}</div></div>
+    <div class="side-head"><img class="side-logo" src="assets/labubook-sidebar.png" alt="Labubook" width="42" height="48">
+      <div><div class="lab-name">${esc(App.lab?.name || 'Labubook')}</div><div class="app-name">Labubook</div></div></div>
     <nav class="side-nav" aria-label="Main">
       ${item('#/', ICON.home, 'Overview', r.name === 'home')}
       ${item('#/experiments', ICON.flask, 'Experiments', r.name.startsWith('exp'))}

@@ -554,36 +554,65 @@ ACT.exportOrder = () => downloadCsv(`to_order_${todayIso()}.csv`, orderList().fl
 }))));
 
 /* ── Activity log ───────────────────────────────────────────────────────── */
-App.actUi = { q: '', person: '' };
+App.actUi = { q: '', person: '', from: '', to: '' };
+const dayStart = iso => iso ? new Date(iso + 'T00:00:00').getTime() : -Infinity;
+const dayEnd = iso => iso ? new Date(iso + 'T23:59:59.999').getTime() : Infinity;
+/* Filter log entries by search text, person (name) and date range (YYYY-MM-DD, inclusive). */
+function activityFilter({ q = '', person = '', from = '', to = '' } = {}) {
+  const text = q.trim().toLowerCase(), a = dayStart(from), b = dayEnd(to);
+  return App.log.filter(l => (!person || l.user === person) && (l.ts || 0) >= a && (l.ts || 0) <= b
+    && (!text || `${l.desc} ${l.user}`.toLowerCase().includes(text)));
+}
+const activityPeople = () => [...new Set(App.log.map(l => l.user).filter(Boolean))].sort((x, y) => x.localeCompare(y));
+/* Rows for the CSV: one line per change, with the person's email and role when they are a member. */
+function activityCsvRows(list) {
+  const byUid = new Map(App.members.map(m => [m.id || m.uid, m]));
+  return list.map(l => {
+    const d = new Date(l.ts), m = byUid.get(l.uid);
+    return {
+      Date: d.toLocaleDateString('sv-SE'), Time: d.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' }),
+      Who: l.user || '', Email: m?.email || '', Role: m ? roleLabel(m.role).split(' ')[0] : '', What: l.desc || ''
+    };
+  });
+}
+function exportActivityCsv(f) {
+  if (!isAdmin()) { toast('Only admins can export the activity log.', 'warn'); return; }
+  const list = activityFilter(f);
+  if (!list.length) { toast('No activity in this range.', 'warn'); return; }
+  const range = f.from || f.to ? `${f.from || 'start'}_to_${f.to || todayIso()}` : 'all';
+  downloadCsv(`activity_log_${fileStem(App.lab?.name || 'lab')}_${range}${f.person ? '_' + fileStem(f.person) : ''}.csv`, activityCsvRows(list));
+  logChange(`Exported the activity log (${plural(list.length, 'entry', 'entries')})`);
+  toast(`Exported ${plural(list.length, 'entry', 'entries')}.`);
+}
+
 VIEWS.activity = {
   render() {
     setPage('Activity', [{ label: 'Activity' }]);
     const ui = App.actUi;
-    const people = [...new Set(App.log.map(l => l.user).filter(Boolean))].sort();
     $('#main').innerHTML = `<div class="page">
       <header class="page-head"><div><h1>Activity</h1><p class="sub">Every change in the inventory: who did what, and when. Newest first.</p></div>
-        <div class="actions"><button class="btn ghost" data-act="exportActivity">Export CSV</button></div></header>
+        <div class="actions">${isAdmin() ? '<button class="btn" data-act="exportActivity">Export CSV</button>' : ''}</div></header>
       <div class="toolbar">
         <label class="search-box">${ICON.search}<input id="acSearch" type="search" placeholder="Search activity" value="${esc(ui.q)}" aria-label="Search activity"></label>
-        <select id="acPerson" aria-label="Person"><option value="">Everyone</option>${people.map(p => `<option${ui.person === p ? ' selected' : ''}>${esc(p)}</option>`).join('')}</select>
+        <select id="acPerson" aria-label="Person"><option value="">Everyone</option>${activityPeople().map(p => `<option${ui.person === p ? ' selected' : ''}>${esc(p)}</option>`).join('')}</select>
+        <label class="date-range"><span>From</span><input id="acFrom" type="date" value="${esc(ui.from)}"></label>
+        <label class="date-range"><span>To</span><input id="acTo" type="date" value="${esc(ui.to)}"></label>
         <span class="grow"></span><span id="acCount" class="muted small"></span>
       </div>
       <div class="panel flush"><div class="tbl-scroll" id="acTable"></div></div></div>`;
     $('#acSearch').addEventListener('input', e => { ui.q = e.target.value; drawActivity(); });
     $('#acPerson').addEventListener('change', e => { ui.person = e.target.value; drawActivity(); });
+    $('#acFrom').addEventListener('change', e => { ui.from = e.target.value; drawActivity(); });
+    $('#acTo').addEventListener('change', e => { ui.to = e.target.value; drawActivity(); });
     drawActivity();
   }
 };
-function filteredActivity() {
-  const q = App.actUi.q.trim().toLowerCase();
-  return App.log.filter(l => (!App.actUi.person || l.user === App.actUi.person) && (!q || `${l.desc} ${l.user}`.toLowerCase().includes(q)));
-}
 function drawActivity() {
-  const list = filteredActivity();
+  const list = activityFilter(App.actUi);
   const shown = list.slice(0, 500);
   $('#acCount').textContent = list.length > shown.length ? `Showing the newest ${fmtNum(shown.length)} of ${fmtNum(list.length)}` : plural(list.length, 'entry', 'entries');
   $('#acTable').innerHTML = shown.length ? `<table class="tbl"><thead><tr><th>When</th><th>Who</th><th>What</th></tr></thead><tbody>
     ${shown.map(l => `<tr><td class="nowrap muted">${esc(fmtTs(l.ts))}</td><td class="nowrap">${esc(l.user || '')}</td><td>${esc(l.desc)}</td></tr>`).join('')}</tbody></table>`
     : '<p class="empty-line">No activity matches.</p>';
 }
-ACT.exportActivity = () => downloadCsv(`activity_${todayIso()}.csv`, filteredActivity().map(l => ({ When: new Date(l.ts).toISOString(), Who: l.user, What: l.desc })));
+ACT.exportActivity = () => exportActivityCsv(App.actUi);

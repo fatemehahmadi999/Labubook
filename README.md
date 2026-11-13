@@ -1,6 +1,10 @@
-# Lab Inventory — modular version
+<p align="center"><img src="assets/labubook-logo.png" alt="Labubook logo" width="200"></p>
 
-A web app for running a lab inventory. Each lab builds its own **modules** — antibodies, reagents, cell lines, mice/PDX, protocols, or anything else — and links them to **experiments**. When an experiment draft is saved, the amounts used are subtracted from stock automatically.
+# Labubook
+
+*A free, customizable lab inventory that stays up to date through your experiments.*
+
+A web app for running a lab inventory. Each lab builds its own **modules** — antibodies, reagents, cell lines, mice, protocols, or anything else — and links them to **experiments**. When an experiment draft is saved, the amounts used are subtracted from stock automatically.
 
 ### ▶ [Try the live demo](https://fatemehahmadi999.github.io/lab-inventory-modular/)
 
@@ -139,7 +143,7 @@ Do the steps in this order. Each step says what you should see when it worked.
 ### Step 3 — Register the app and copy its settings
 
 1. On the project's start page, click the **web icon** `</>` ("Add an app" → Web).
-2. **App nickname:** for example `lab inventory web`.
+2. **App nickname:** for example `labubook web`.
 3. Leave **"Also set up Firebase Hosting"** unchecked.
 4. Click **Register app**.
 5. Firebase shows a block of code with `const firebaseConfig = { … }`. It has six lines: `apiKey`, `authDomain`, `projectId`, `storageBucket`, `messagingSenderId`, `appId`.

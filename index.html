@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lab Inventory</title>
+<title>Labubook</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/labubook-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -127,8 +129,8 @@ input[type=checkbox], input[type=radio] { accent-color: var(--accent); width: 15
 .auth-card .row { margin-top: 18px; }
 .auth-foot { color: var(--ink-3); font-size: 12px; }
 .auth-links { display: flex; justify-content: space-between; padding-top: 4px; }
-.brand-mark { width: 40px; height: 40px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; }
-.brand-mark svg { width: 22px; height: 22px; }
+.brand-logo { display: block; width: 112px; height: 112px; border-radius: 50%; margin: -6px auto 4px; object-fit: cover; box-shadow: 0 0 0 1px var(--line); }
+.auth-card > h1 { text-align: center; }
 .tpl-pick { border: 1px solid var(--line); border-radius: var(--r); padding: 6px 12px 10px; margin: 0; }
 .tpl-pick legend { font-size: 12.5px; font-weight: 500; color: var(--ink-2); padding: 0 4px; }
 .tpl-opt { display: grid; grid-template-columns: auto auto 1fr; gap: 4px 10px; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
@@ -138,7 +140,11 @@ input[type=checkbox], input[type=radio] { accent-color: var(--accent); width: 15
 /* ── App shell ──────────────────────────────────────────────────────────── */
 #app { display: grid; grid-template-columns: 236px minmax(0, 1fr); height: 100vh; }
 #sidebar { background: var(--side); color: var(--side-ink); display: flex; flex-direction: column; min-height: 0; }
-.side-head { padding: 18px 18px 12px; }
+.side-head { display: flex; align-items: center; gap: 10px; padding: 16px 16px 12px; }
+.side-logo { flex: none; width: auto; height: 48px; }
+.date-range { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink-2); }
+.date-range input { width: auto !important; }
+.app-name { font-size: 11.5px; color: var(--side-ink-2); margin-top: 1px; }
 .lab-name { font-weight: 600; font-size: 15px; color: #fff; line-height: 1.3; }
 .side-nav { flex: 1; overflow-y: auto; padding: 4px 10px 12px; }
 .nav-item { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: var(--r); color: var(--side-ink); font-size: 13.5px; text-decoration: none !important; }
@@ -405,7 +411,7 @@ div.list-row { cursor: default; } div.list-row:hover { background: none; }
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
 </head>
 <body>
-<div id="boot" class="boot">Loading…</div>
+<div id="boot" class="boot">Loading Labubook…</div>
 <div id="auth" hidden></div>
 <div id="app" hidden>
   <aside id="sidebar" aria-label="Sidebar"></aside>
@@ -426,14 +432,14 @@ div.list-row { cursor: default; } div.list-row:hover { background: none; }
 <div id="modalRoot"></div>
 <div id="toasts" aria-live="polite"></div>
 
-<script src="config.js?v=7"></script>
-<script src="js/schema.js?v=7"></script>
-<script src="js/store.js?v=7"></script>
-<script src="js/core.js?v=7"></script>
-<script src="js/records.js?v=7"></script>
-<script src="js/experiments.js?v=7"></script>
-<script src="js/admin.js?v=7"></script>
-<script src="js/demo.js?v=7"></script>
+<script src="config.js?v=9"></script>
+<script src="js/schema.js?v=9"></script>
+<script src="js/store.js?v=9"></script>
+<script src="js/core.js?v=9"></script>
+<script src="js/records.js?v=9"></script>
+<script src="js/experiments.js?v=9"></script>
+<script src="js/admin.js?v=9"></script>
+<script src="js/demo.js?v=9"></script>
 <script>boot();</script>
 </body>
 </html>

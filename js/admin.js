@@ -337,6 +337,16 @@ VIEWS.settings = {
       <section class="panel"><header class="panel-head"><h2>Lab name</h2></header><form id="labForm" class="panel-body form-row">
         <label class="field grow"><span>Name shown in the sidebar</span><input id="labName" value="${esc(App.lab?.name || '')}" required></label><button class="btn">Save</button></form></section>
 
+      <section class="panel"><header class="panel-head"><h2>Activity log</h2></header><div class="panel-body stack">
+        <p>Download a record of what people changed in the inventory: date, time, person, email, role and the change. Leave the dates empty to export everything.</p>
+        <div class="form-row">
+          <label class="field"><span>From</span><input id="alFrom" type="date"></label>
+          <label class="field"><span>To</span><input id="alTo" type="date"></label>
+          <label class="field"><span>Person</span><select id="alPerson"><option value="">Everyone</option>${activityPeople().map(p => `<option>${esc(p)}</option>`).join('')}</select></label>
+          <button class="btn primary" data-act="exportActivityLog">Download activity log (CSV)</button>
+        </div>
+        <p class="muted small">The file opens in Excel or Google Sheets. Exports are themselves recorded in the log.</p></div></section>
+
       <section class="panel"><header class="panel-head"><h2>Backup</h2></header><div class="panel-body stack">
         <p>Download everything — modules, items, experiments, projects and the activity log — as one JSON file. Keep it on a lab drive. Do this at least once a month and before big changes.</p>
         <div class="row"><button class="btn primary" data-act="downloadBackup">Download backup</button>
@@ -363,6 +373,7 @@ VIEWS.settings = {
     $('#oldFile').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) readJson(f).then(previewOldImport).catch(err => toast(errorMessage(err), 'bad')); });
   }
 };
+ACT.exportActivityLog = () => exportActivityCsv({ from: $('#alFrom').value, to: $('#alTo').value, person: $('#alPerson').value });
 ACT.resetDemo = async () => { if (await confirmDialog('Delete all demo data?', 'Everything you entered in demo mode in this browser is removed.')) App.store.resetDemo(); };
 const readJson = file => file.text().then(t => { try { return JSON.parse(t); } catch (_) { throw new Error('This file is not valid JSON.'); } });
 
