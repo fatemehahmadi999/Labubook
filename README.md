@@ -34,7 +34,7 @@ Setting it up takes about 30 minutes. Everything happens in the browser. You do 
 
 ## How to use it — a short tour
 
-The easiest way to learn is the [live demo](https://fatemehahmadi999.github.io/lab-inventory-modular/). The tour below follows a normal lab week.
+The easiest way to learn is the [live demo](https://fatemehahmadi999.github.io/Labubook/). The tour below follows a normal lab week.
 
 ### 1. Find anything in seconds
 - Type into **Search all items** at the top. It searches every module at once: names, catalog numbers, clones, locations, sequences.
